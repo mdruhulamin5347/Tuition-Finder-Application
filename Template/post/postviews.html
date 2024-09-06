@@ -1,0 +1,11 @@
+{% extends 'basic.html'%}
+{% block title %} API page {% endblock %}
+{% block body %}
+
+    {% for i in api %}
+        {{i.title}} <br>
+        {{i.body}} 
+    
+      {% endfor %}
+
+{% endblock body %}

@@ -1,0 +1,207 @@
+{% extends 'basic.html' %}
+
+{% block title %} Details {% endblock %}
+
+{% block body %}
+<div class="container mt-5" style="margin-bottom: 80px !important;">
+    <div class="border">
+        <h3 class="card-title text-center mb-4 mt-2" style="margin-top: 10px;">Details</h3>
+
+        {% load humanize %}
+        {% load tag %}
+
+        <div class="row">
+            <div class="col-md-5 d-flex flex-column align-items-center mb-5">
+                {% if object.user.userprofile.image.url %}
+                <img style="height: 200px; width: 200px;" src="{{object.user.userprofile.image.url}}" alt="Profile Picture" class="rounded-circle mb-3 border"/>
+                {% else %}
+                <img src="/Media/media/profile/default.jpg" style="height: 200px; width: 200px;" class="rounded-circle mb-3 border" />
+                {% endif %}
+                <div class="text-center mb-3">
+                  <h2 class="card-title mdruhuldev  uppercase-text" style="font-size: 35px; text-transform: uppercase;">
+                    <a class="text-decoration-none text-dark underline-on-hover" href="{% url 'otherprofile' object.user.id %}">
+                        {% if object.user.get_full_name %}
+                            {{ object.user.get_full_name|upper }}
+                        {% else %}
+                            {{ object.user.username }}
+                        {% endif %}
+                    </a>
+                    
+                  </h2>
+                  <span class="badge bg-secondary">{{object.created_at | naturaltime}}</span>
+                    
+                </div>
+                
+                {% if request.user == object.user %}
+                <div class="d-flex justify-content-center w-100">
+                    <a class="btn btn-secondary btn-sm me-2" href="{% url 'post_edit' object.id %}">Edit</a>
+                    <button class="btn btn-danger ms-2 btn-sm" data-bs-toggle="modal" data-bs-target="#deletePostModal">Delete Post</button>
+                </div>
+
+                <!-- Modal for deleting post -->
+                <div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="deletePostModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deletePostModalLabel">Delete Post</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure you want to delete this post?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <a class="btn btn-danger" href="{% url 'post_delete' object.id %}">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div>
+                  <a class="btn btn-secondary btn-sm" href="{% url 'post_apply' object.id %}">Apply for Tuition</a>
+                  {% if object.user.teacher_profile.id %}
+                  <a class="btn btn-secondary btn-sm" href="{% url 'otherprofile' object.user.id %}">Profile View</a>
+                  {% else %}
+                  <a class="btn btn-secondary btn-sm" href="#">No Profile</a>
+                  {% endif %}
+                </div>
+                
+                {% endif %}
+            </div>
+
+            <div class="col-md-7">
+                <div class="mb-4">
+                    <p><strong>Title:</strong> {{object.title_proper}}</p>
+                    <p><strong>Salary:</strong> {{object.salary}}</p>
+                    <p><strong>Details:</strong> {{object.details}}</p>
+                    <p><strong>District:</strong> {{object.district}}</p>
+                    <p><strong>Category:</strong> {{object.category}}</p>
+                    <p><strong>Language:</strong> {{object.language}}</p>
+                    <p><strong>Class Level:</strong> {{object.get_classin_list}}</p>
+                    <p><strong>Subject:</strong> {{object.get_subject_list}}</p>
+                    <p class="mt-5">(<strong>{{object.total_views}}</strong>) people have seen this post</p>
+                    <p>(<strong>{{object.total_likes}}</strong>) people like this post</p>
+                </div>
+
+                <div class="d-flex mb-4">
+                    <form method="POST" action="{% url 'like_post' object.id %}" class="me-2">
+                        {% csrf_token %}
+                        {% if liked %}
+                            <button class="btn btn-secondary btn-sm" type="submit">Unlike</button>
+                        {% else %}
+                            <button class="btn btn-outline-secondary btn-sm" type="submit">Like</button>
+                        {% endif %}
+                    </form>
+                    <button class="btn btn-secondary btn-sm" style="margin-right: 8px;" type="button" onclick="document.getElementById('comment-form').style.display='block'">Add Comment</button>
+                </div>
+
+                <div class="mb-4">
+                    <form id="comment-form" action="{% url 'comment' %}" method="POST" style="display: none;">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <input type="text" id="comment" name="comment" class="form-control" placeholder="Enter your comment">
+                            <input type="hidden" name="postid" value="{{object.id}}">
+                            <input type="hidden" name="parentid" value="">
+                        </div>
+                        <button type="submit" class="btn btn-secondary btn-sm">Submit Comment</button>
+                    </form>
+                </div>
+
+                {% for comment in comments %}
+                <div class="mb-4">
+                    <div class="d-flex align-items-start">
+                        {% if comment.user.userprofile.image.url %}
+                        <img src="{{comment.user.userprofile.image.url}}" class="img-thumbnail me-3" alt="Commenter Profile Picture" style="width: 45px; height: 45px;">
+                        {% else %}
+                        <img src="/Media/media/profile/default.jpg" style="width: 45px; height: 45px;" class="img-thumbnail me-3" />                        
+                        {% endif %}
+                        <div>
+                            <p><strong>{{comment.user.username}}</strong> 
+                                <span class="badge bg-secondary">{{comment.create_at | naturaltime}}</span>
+                            </p>
+                            <p>{{comment.text}}</p>
+                          
+                            <button class="badge btn btn-secondary btn-sm" type="button" onclick="document.getElementById('reply-form-{{comment.id}}').style.display='block'">Reply</button>
+                            <button class="badge btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteCommentModal{{comment.id}}">Delete</button>
+                        </div>
+                    </div>
+
+                    <div id="reply-form-{{comment.id}}" class="mb-3 ms-5 mt-1" style="display: none; margin-bottom:5px;  margin-left:15px;">
+                        <form action="{% url 'comment' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="mb-2">
+                                <input type="text" id="reply" name="comment" class="form-control" placeholder="Enter your reply">
+                                <input type="hidden" name="postid" value="{{object.id}}">
+                                <input type="hidden" name="parentid" value="{{comment.id}}">
+                            </div>
+                            <button type="submit" class="btn btn-secondary btn-sm">Submit Reply</button>
+                        </form>
+                    </div>
+
+                    {% for reply in dictofreply|get_reply:comment.id %}
+                    <div class="d-flex align-items-start mb-3 ms-5" style="margin-top: 8px;">
+                        {% if reply.user.userprofile.image.url %}
+                        <img src="{{reply.user.userprofile.image.url}}" class="img-thumbnail me-3" alt="Reply Profile Picture" style="width: 35px; height: 35px;">
+                        {% else %}
+                        <img src="/Media/media/profile/default.jpg" style="width: 35px; height: 35px;" class="img-thumbnail me-3" />                        
+                        {% endif %}
+                        <div>
+                            <p><strong>{{reply.user.username}}</strong> 
+                                <span class="badge bg-secondary">{{reply.create_at | naturaltime}}</span>
+                            </p>
+                            <p>{{reply.text}}</p>
+                            <button class="badge btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteReplyModal{{reply.id}}">Delete Reply</button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals for deleting comments and replies -->
+{% for comment in comments %}
+<div class="modal fade" id="deleteCommentModal{{comment.id}}" tabindex="-1" aria-labelledby="deleteCommentModalLabel{{comment.id}}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteCommentModalLabel{{comment.id}}">Delete Comment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this comment?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a class="btn btn-danger" href="{% url 'delete_comment' comment.id %}">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% for comment in comments %}
+    {% for reply in dictofreply|get_reply:comment.id %}
+    <div class="modal fade" id="deleteReplyModal{{reply.id}}" tabindex="-1" aria-labelledby="deleteReplyModalLabel{{reply.id}}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteReplyModalLabel{{reply.id}}">Delete Reply</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this reply?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a class="btn btn-danger" href="{% url 'delete_comment' reply.id %}">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endfor %}
+
+{% endblock %}

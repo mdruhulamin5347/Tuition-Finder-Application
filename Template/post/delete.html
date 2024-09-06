@@ -1,0 +1,29 @@
+{% extends 'basic.html' %}
+{% block title %} Delete Post  {% endblock %}
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-4 col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 style="font-weight: bold;" class="card-title text-center">Are you sure delete this post??</h5><br><br>
+            
+            <form method="POST">
+                {% csrf_token %}
+                    <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Yes</button>
+                  </div> <br>
+                  <div class="d-grid">
+                    <button type="button" class="btn btn-primary"><a style="color:white; text-decoration:none; " href="/post/list/">No</a></button>
+                  </div>
+            </form>
+            
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  </div>
+{% endblock body %}

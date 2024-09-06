@@ -1,0 +1,103 @@
+{% extends 'basic.html' %}
+{% block title %} Tuition Profile View {% endblock %}
+{% block body %}
+
+<div class="container mt-5" style="margin-bottom: 80px !important;">
+    <div class="row border p-2">
+        <!-- Column 1: Image and Username -->
+        <div class="col-md-4 text-center mb-5">
+          <div>
+            {% if user.userprofile.image.url %}
+              <img src="{{user.userprofile.image.url}}" style="height: 200px; width: 200px;" class="rounded-circle mb-3 border" />
+            {% else %}
+            <img src="/Media/media/profile/default.jpg" style="height: 200px; width: 200px;" class="rounded-circle mb-3 border" />
+
+            {% endif %}
+      
+              {% if user.first_name %}
+                  <p style="font-size: 24px; text-transform:uppercase;" >
+                      <strong><span>{{ user.first_name }}</span> <span>{{ user.last_name }}</span></strong>
+                  </p>
+              {% else %}
+                  <strong><p style="font-size: 24px; text-transform:uppercase;">{{ user.username }}</p></strong>
+              {% endif %}
+      
+              <p class="badge bg-secondary">{{ user.userprofile.created_at }}</p>
+      
+              <div class="mt-4">
+                
+                    <a href="{% url 'create' %}" class="btn btn-secondary btn-sm me-2">Update Profile</a>
+                    <a href="{% url 'tuitionbd' %}" class="btn btn-secondary btn-sm">Create Tuition Profile</a>
+                
+              </div>
+          </div>
+      </div>
+      
+      
+
+        <!-- Column 2: Profile Data -->
+        <div class="col-md-4 mb-3">
+            {% if user.userprofile %}
+                <div>
+                    <h3 class="border-bottom mb-4">Personal Information</h3>
+                    <p><strong>Birth Date:</strong> {{user.userprofile.birth_date}}</p>
+                    <p><strong>Gender:</strong> {{user.userprofile.gender}}</p>
+                    <p><strong>Blood Group:</strong> {{user.userprofile.blood_group}}</p>
+                    <p><strong>Address:</strong> {{user.userprofile.address}}</p>
+                    <p><strong>Phone:</strong> {{user.userprofile.phone}}</p>
+                    <p><strong>Nationality:</strong> {{user.userprofile.nationality}}</p>
+                    <p><strong>Religion:</strong> {{user.userprofile.religion}}</p>
+                    <p><strong>Biodata:</strong> {{user.userprofile.biodata}}</p>
+                    <p><strong>Profession:</strong> {{user.userprofile.profession}}</p>
+                </div>
+            {% else %}
+            <div class="text-center mt-5">
+                <h5>No profile data available. Please update your profile.</h5>
+            </div>  
+            {% endif %}
+        </div>
+
+        <!-- Column 3: Tuition Data -->
+        <div class="col-md-4">
+          {% if user.teacher_profile %}
+              <div>
+                  <h3 class="border-bottom mb-4">Tuition Related Information</h3>              
+                  <p style="line-height: 1.0;"><strong>District:</strong> {{user.teacher_profile.district}}</p>
+                  <p style="line-height: 1.0;"><strong>Category:</strong> {{user.teacher_profile.category}}</p>
+                  <p style="line-height: 1.0;"><strong>Style:</strong> {{user.teacher_profile.style}}</p>
+                  <p style="line-height: 1.0;"><strong>Place:</strong> {{user.teacher_profile.place}}</p>
+                  <p style="line-height: 1.0;"><strong>Approach:</strong> {{user.teacher_profile.approach}}</p>
+                  <p style="line-height: 1.0;"><strong>Language:</strong> {{user.teacher_profile.medium}}</p>
+                  <p style="line-height: 1.0;"><strong>Salary:</strong> {{user.teacher_profile.salary}}</p>
+                  <p style="line-height: 1.0;"><strong>Days Per Week:</strong> {{user.teacher_profile.days_per_week}}</p>
+                  <p style="line-height: 1.0;"><strong>Education:</strong> {{user.teacher_profile.education}}</p>
+                  <p style="line-height: 1.0;"><strong>Status:</strong> {{user.teacher_profile.status}}</p>
+                  <p style="line-height: 1.0;"><strong>Subjects:</strong> 
+                      {% for i in user.teacher_profile.subject.all %}
+                          {{i}}
+                          {% if not forloop.last %}, {% endif %}
+                      {% endfor %}
+                  </p>
+                  <p style="line-height: 1.0;"><strong>Classes:</strong> 
+                      {% for i in user.teacher_profile.classin.all %}
+                          {{i}}
+                          {% if not forloop.last %}, {% endif %}
+                      {% endfor %}
+                  </p>
+              </div>
+            {% else %}
+            <div class="text-center mt-5">
+                <h5>No tuition profile data available. Please create your tuition profile.</h5>
+            </div>          
+            {% endif %}
+      </div>
+      
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+
+

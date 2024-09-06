@@ -1,0 +1,55 @@
+/* .hedding{
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    
+}
+ .hedding li{
+    float: left;
+    list-style-type:none;
+   
+   
+ }
+
+   
+   
+    
+
+ .hedding li a{
+    font-size: 20px;
+    text-decoration: none;
+    display:block;
+    padding: 10px;
+    
+    color: beige;
+    text-transform: capitalize;
+    
+   
+    
+}
+.hedding li a:hover{
+    background-color: aqua;
+    color: blue;
+}
+.hedding li a:active{
+    background-color: yellow;
+}
+.hedding .drop {
+   position: absolute;
+   background-color: white;
+  box-shadow: 2px 2px 10px;
+}
+.hedding .drop  a{
+    color: black;
+    display: block;
+    display: none;
+}
+
+.hedding .drop a:hover{
+    background-color: wheat;
+    
+}
+.hedding li:hover .drop a{
+    display: block;
+} */

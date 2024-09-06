@@ -1,0 +1,42 @@
+{% extends 'basic.html' %}
+{% block title %}Notification{% endblock %}
+{% block body %}
+{% load notifications_tags %}
+
+<div class="container mt-5" style="margin-bottom: 80px !important;">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+      <div class="card">
+        <div class="card-body">
+          
+          <div>
+            {% notifications_unread as unread_count %}
+            {% if unread_count %}
+              <p>You have <b>{% live_notify_badge %}</b> unread notifications</p>
+              {% live_notify_list %}
+              {{ live_notify_list | safe }}
+            {% else %}
+              <p>You have no unread notifications.</p>
+            {% endif %}
+          </div>
+          
+          <br><br>
+          
+          <div>
+            <h3>Your All Notifications</h3>
+            {% for i in user.notifications.unread %}
+              <div class="notification-item">
+                {{ i | safe }} <br>
+              </div>
+            {% empty %}
+              <p>No notifications to display.</p>
+            {% endfor %}
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock body %}

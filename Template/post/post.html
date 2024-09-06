@@ -1,0 +1,31 @@
+{% extends 'basic.html'%}
+{% block title %} Post {% endblock %}
+{% block body %}
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title text-center">Create A New Post</h5>
+          
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% load crispy_forms_tags %}
+            {{form | crispy}}
+            <div class="grid d-flex">
+                <button type="submit" class="btn btn-secondary w-50 m-2">Submit</button>
+                <button type="reset" class="btn btn-secondary w-50 m-2">Reset</button>
+            </div>
+           </form>
+            
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<br><br><br><br><br>
+{% endblock body %}

@@ -1,0 +1,194 @@
+{% extends 'basic.html' %}
+{% block title %} Post List {% endblock %}
+{% block head %}
+<style>
+    .mdruhuldjango .mdruhuldev a:hover{
+        text-decoration: underline !important;
+    }
+</style>
+{% endblock head %}
+{% block body %}
+
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <!-- Sidebar for Category and Filters -->
+        <div class="col-md-4 mb-4 d-none d-md-block">
+            <div class="sticky-top">
+                <h3 class="text-black mb-4 text-center">Select Post Category</h3>
+                <div class="d-flex flex-column">
+                    {% for i in categories %}
+                    <a class="btn btn-outline-secondary mb-2" href="{% url 'post_list' %}?category={{i.id}}">
+                        {{i.name}}
+                    </a>
+                    {% endfor %}
+                    <a class="btn btn-outline-secondary mt-2 w-100" href="{% url 'post_list' %}">View All</a>
+                </div>
+            </div>
+
+            <div class="filter-card card p-3 mt-5">
+                <h5 class="card-header bg-secondary text-white text-center">Filter Posts</h5>
+                <div class="card-body">
+                    <form action="{% url 'filter' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label" for="category">Category</label>
+                            <select class="form-select" id="category" name="category">
+                                <option value="" selected>Choose...</option>
+                                {% for i in categories %}
+                                <option value="{{i.name}}">{{i.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="classin">Class In</label>
+                            <select class="form-select" id="classin" name="classin">
+                                <option value="" selected>Choose...</option>
+                                {% for i in classin %}
+                                <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="subject">Subject</label>
+                            <select class="form-select" id="subject" name="subject">
+                                <option value="" selected>Choose...</option>
+                                {% for i in subjects %}
+                                <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="salary_from">Salary From</label>
+                            <input type="number" class="form-control" name="salary_from" id="salary_from">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="salary_to">Salary To</label>
+                            <input type="number" class="form-control" name="salary_to" id="salary_to">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="available" name="available">
+                            <label class="form-check-label" for="available">Only Available</label>
+                        </div>
+                        <button type="submit" class="btn btn-secondary w-100">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile View Sidebar Toggle -->
+        <div class="col-12 d-md-none">
+            <button class="btn btn-light w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#mobileFilter" aria-expanded="false" aria-controls="mobileFilter">
+                <i class="bi bi-filter"></i> Filter
+            </button>
+            <button class="btn btn-light w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#mobileCategories" aria-expanded="false" aria-controls="mobileCategories">
+                <i class="bi bi-list"></i> Categories
+            </button>
+        </div>
+
+        <div class="col-md-4 d-md-none">
+            <div class="collapse" id="mobileCategories">
+                <div class="sticky-top bg-light p-3">
+                    <h4 class="text-black mb-3 text-center">Select Post Category</h4>
+                    <div class="d-flex flex-column">
+                        {% for i in categories %}
+                        <a class="btn btn-outline-secondary mb-2" href="{% url 'post_list' %}?category={{i.id}}">
+                            {{i.name}}
+                        </a>
+                        {% endfor %}
+                        <a class="btn btn-outline-secondary mt-2 w-100" href="{% url 'post_list' %}">View All</a>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse" id="mobileFilter">
+                <div class="filter-card card p-3 mt-3">
+                    <h5 class="card-header bg-secondary text-white text-center">Filter Posts</h5>
+                    <div class="card-body">
+                        <form action="{% url 'filter' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label" for="category">Category</label>
+                                <select class="form-select" id="category" name="category">
+                                    <option value="" selected>Choose...</option>
+                                    {% for i in categories %}
+                                    <option value="{{i.name}}">{{i.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="classin">Class In</label>
+                                <select class="form-select" id="classin" name="classin">
+                                    <option value="" selected>Choose...</option>
+                                    {% for i in classin %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="subject">Subject</label>
+                                <select class="form-select" id="subject" name="subject">
+                                    <option value="" selected>Choose...</option>
+                                    {% for i in subjects %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="salary_from">Salary From</label>
+                                <input type="number" class="form-control" name="salary_from" id="salary_from">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="salary_to">Salary To</label>
+                                <input type="number" class="form-control" name="salary_to" id="salary_to">
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="available" name="available">
+                                <label class="form-check-label" for="available">Only Available</label>
+                            </div>
+                            <button type="submit" class="btn btn-secondary w-100">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Post List Section -->
+        <div class="col-md-8 mdruhuldjango">
+            {% if posts %}
+            <h3 class="text-center mb-4">Available Posts Here</h3>
+            {% for i in posts %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mdruhuldev  uppercase-text" style="font-size: 30px; text-transform: uppercase;">
+                       
+                            {% if i.user.get_full_name %}
+                                {{ i.user.get_full_name|slice:":25" }}
+                            {% else %}
+                                {{ i.user.username|slice:":25" }}
+                            {% endif %}
+                      
+                    </h5>
+                    <p class="card-text" >
+                        <span class="badge bg-secondary">{{ i.created_at }}</span><br>
+                        {% if i.category.name == "Student" %}
+                        - Searching for a teacher
+                        {% else %}
+                        - Searching for a student
+                        {% endif %}
+                    </p>
+                    <p class="card-text">                        
+                        For <strong>{{ i.get_subject_list }}</strong> Subjects <br>                       
+                        In <strong>{{ i.district }}</strong> District <br>
+                        Salary: <strong>{{ i.salary }} BDT</strong> <br>
+                    </p>
+                    <a class="badge bg-light btn btn-light" style="color:#000000;" href="{% if user.is_authenticated %}{% url 'post_detail' i.id %}{% else %}{% url 'login' %}{% endif %}">Read More</a>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <h3 class="text-center mb-4">No Posts Available Here</h3>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

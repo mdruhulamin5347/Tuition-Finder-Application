@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF DOWNLOAD</title>
+    <style>
+        body {
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+        }
+        .header {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .header h1 {
+            margin: 0;
+            color: #007bff;
+        }
+        .header p {
+            margin: 5px 0;
+            color: #555;
+        }
+        .main-content {
+            display: flex;
+            flex-wrap: wrap; /* Allow items to wrap */
+            gap: 20px;
+        }
+        .profile-info, .tuition-info {
+            flex: 1;
+            padding: 10px;
+            box-sizing: border-box;
+            min-width: 300px; /* Ensure a minimum width */
+            line-height: 1.5; /* Improve readability with line height */
+        }
+        .profile-info {
+            border-right: 1px solid #ddd;
+        }
+        .profile-info img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+        .profile-info h3, .tuition-info h3 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            color: #333;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+          {% if contact.user.userprofile.image.url %}
+          <img src="{{contact.user.userprofile.image.url}}" style="height: 200px; width: 200px;" class="rounded-circle mb-3 border" />
+          {% else %}
+          <img src="/Media/media/profile/default.jpg" style="height: 200px; width: 200px;" class="rounded-circle mb-3 border" />
+  
+          {% endif %}
+          {% if contact.user.first_name %}
+            <p class="text-black" style="font-size: 24px; text-transform:uppercase; ">
+              <strong><span class="text-black">{{ contact.user.first_name }}</span> <span  class="text-black">{{ contact.user.last_name }}</span></strong>
+            </p>
+          {% else %}
+            <strong><p style="font-size: 24px; text-transform:uppercase;"  class="text-black">{{ contact.user.username }}</p></strong>
+          {% endif %}
+          
+          <p class="badge bg-secondary text-white">{{ contact.user.userprofile.created_at }}</p>
+        </div>
+
+        <div class="row border">
+         
+          <div class="col-md-4 text-center mb-5">
+            <div>             
+          
+          <!-- Column 2: Profile Data -->
+          <div class="col-md-4 mb-4">
+            {% if contact.user.userprofile %}
+              <div class="mb-4">
+                <hr>
+                <h1 class="m-0">Personal Information</h1>                
+                <p style="line-height: 1.2;"><strong>Birth Date:</strong> {{contact.user.userprofile.birth_date}}</p>
+                <p style="line-height: 1.2;"><strong>Gender:</strong> {{contact.user.userprofile.gender}}</p>
+                <p style="line-height: 1.2;"><strong>Blood Group:</strong> {{contact.user.userprofile.blood_group}}</p>
+                <p style="line-height: 1.2;"><strong>Address:</strong> {{contact.user.userprofile.address}}</p>
+                <p style="line-height: 1.2;"><strong>Phone:</strong> {{contact.user.userprofile.phone}}</p>
+                <p style="line-height: 1.2;"><strong>Nationality:</strong> {{contact.user.userprofile.nationality}}</p>
+                <p style="line-height: 1.2;"><strong>Religion:</strong> {{contact.user.userprofile.religion}}</p>
+                <p style="line-height: 1.2;"><strong>Biodata:</strong> {{contact.user.userprofile.biodata}}</p>
+                <p style="line-height: 1.2;"><strong>Profession:</strong> {{contact.user.userprofile.profession}}</p>
+              </div>
+              {% else %}
+              <div class="text-center mt-5">
+                  <h5>No profile data available. Please update your profile.</h5>
+              </div>  
+              {% endif %}
+          </div>
+      
+          <!-- Column 3: Tuition Data -->
+          <div class="col-md-4 mb-3">
+            {% if contact %}
+              <div><hr>
+                <h1 class="m-0">Tuition Related Information</h1>
+                <p style="line-height: 1.2;"><strong>District:</strong> {{contact.district}}</p>
+                <p style="line-height: 1.2;"><strong>Category:</strong> {{contact.category}}</p>
+                <p style="line-height: 1.2;"><strong>Style:</strong> {{contact.style}}</p>
+                <p style="line-height: 1.2;"><strong>Place:</strong> {{contact.place}}</p>
+                <p style="line-height: 1.2;"><strong>Approach:</strong> {{contact.approach}}</p>
+                <p style="line-height: 1.2;"><strong>Language:</strong> {{contact.medium}}</p>
+                <p style="line-height: 1.2;"><strong>Salary:</strong> {{contact.salary}}</p>
+                <p style="line-height: 1.2;"><strong>Days Per Week:</strong> {{contact.days_per_week}}</p>
+                <p style="line-height: 1.2;"><strong>Education:</strong> {{contact.education}}</p>
+                <p style="line-height: 1.2;"><strong>Status:</strong> {{contact.status}}</p>
+                <p style="line-height: 1.2;"><strong>Subjects:</strong> 
+                  {% for i in contact.subject.all %}
+                    {{i}}
+                    {% if not forloop.last %}, {% endif %}
+                  {% endfor %}
+                </p style="line-height: 1.2;">
+                <p><strong>Classes:</strong> 
+                  {% for i in contact.classin.all %}
+                    {{i}}
+                    {% if not forloop.last %}, {% endif %}
+                  {% endfor %}
+                </p>
+              </div>
+              {% else %}
+              <div class="text-center mt-5">
+                  <h5>No tuition profile data available. Please update your profile.</h5>
+              </div>  
+              {% endif %}
+          </div>
+          
+        </div>
+ 
+        <div class="footer">
+            <h3>Jackfruit IT</h3>
+            <p style="margin: 0%;">Thanks for supporting us</p>
+        </div>
+    </div>
+</body>
+</html>

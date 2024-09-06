@@ -1,0 +1,24 @@
+{% extends 'basic.html'%}
+{% block title %} Home page {% endblock %}
+{% block body %}
+{% load humanize %}
+    <div class="picture-block">
+    {% for i in object_list %}
+    <a href="/post/details/{{i.id}}">
+      <div class="picture-card">
+        
+        <img  src="{{i.image.url}}" alt="" /> <br>
+        
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{i.title}}</h5>
+            <p class="card-text">Create: {{i.create_at | naturaltime }}</p>
+          </div>
+        </div>
+       
+      </div>
+    </a>
+      {% endfor %}
+      <div></div>
+    <br><br><br><br>
+{% endblock body %}

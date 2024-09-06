@@ -1,0 +1,29 @@
+{% extends 'basic.html'%}
+{% block title %} Tuition Profile Create {% endblock %}
+{% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+          <div class="col-lg-7 col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title text-center">Create Tuition Profile</h5>
+                
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% load crispy_forms_tags %}
+                    {{form | crispy}}
+                  <div class="grid">
+                      <button type="submit" class="btn btn-secondary w-100">Submit</button>
+                      
+                  </div>
+                 </form>               
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      </div>
+      <br><br><br><br><br>
+
+{% endblock body %}

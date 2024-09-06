@@ -1,0 +1,27 @@
+{% extends 'basic.html'%}
+{% block title %} Create Profile  {% endblock %}
+{% block body %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title text-center">Create Profile</h5>
+            
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% load crispy_forms_tags %}
+                {{form | crispy}}
+              <div class="d-grid">
+                  <button type="submit" class="btn btn-secondary">Update Profile</button>
+              </div>
+             </form>               
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  </div>
+  <br><br><br><br><br>
+{% endblock body %}
